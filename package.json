@@ -1,0 +1,18 @@
+{
+  "name": "accountsjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@accounts/graphql-api": "^0.29.0",
+    "@accounts/mongo": "^0.29.0",
+    "@accounts/password": "^0.29.0",
+    "@accounts/server": "^0.29.0",
+    "@graphql-modules/core": "^0.7.17",
+    "@graphql-toolkit/schema-merging": "^0.10.7",
+    "@sendgrid/mail": "^7.4.0",
+    "apollo-server": "^2.19.0",
+    "graphql": "^15.4.0",
+    "mongoose": "^5.11.5"
+  }
+}
