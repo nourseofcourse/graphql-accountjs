@@ -77,7 +77,7 @@ const start = async () => {
 
   const resolvers = {
     Query: {
-      sensitiveInformation: () => 'Sensitive Info'
+      sensitiveInformation: () => 'Sensitive'
     }
   }
 
