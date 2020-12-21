@@ -7,8 +7,9 @@ const { Mongo } = require('@accounts/mongo')
 const { AccountsServer } = require('@accounts/server')
 const { AccountsPassword } = require('@accounts/password')
 const { DatabaseManager } = require('@accounts/database-manager')
+const { renderString, renderTemplateFile } = require('template-file')
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+sgMail.setApiKey('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')
 
 const start = async () => {
   // Create database connection
@@ -45,13 +46,57 @@ const start = async () => {
     //   return user;
     // },
   })
-
+ 
   // Create accounts server that holds a lower level of all accounts operations
   const accountsServer = new AccountsServer({
     db: accountsDb,
     tokenSecret: 'mgaSecretToken',
-    sendMail: ({ from, subject, to, text, html }) => {
-      sgMail.send({ to, from: "FFEBA <booking@thefederaledge.com>", subject, text, html })
+    sendMail: async ({ from, subject, to, text, html }) => {
+      const email = await html
+      sgMail.send({ to, from: "FFEBA <booking@thefederaledge.com>", subject, text, html: email  })
+    },
+    emailTemplates: {
+      from: 'FFEBA <booking@thefederaledge.com>',
+      verifyEmail: {
+        subject: (user) => 'Verify your account email',
+        text: (user, url) => `To verify your account email please click on this link2: ${url}`,
+        html: async (user, url) => {
+          const data = {
+            email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
+            url
+          }
+          const template = await renderTemplateFile('./templates/verify.html', data).then((render) => {
+            return render
+          })
+          return template
+        }
+      },
+      resetPassword: {
+        html: async (user, url) => {
+          const data = {
+            email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
+            url
+          }
+          const template = await renderTemplateFile('./templates/password.html', data).then((render) => {
+            return render
+          })
+          return template
+        }
+      },
+      enrollAccount: {
+        subject: (user) => 'Welcome to Megastar Advisors.',
+        text: (user, url) => `Welcome to Megastar Advisors.`,
+        html: async (user, url) => {
+          const data = {
+            email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
+            url
+          }
+          const template = await renderTemplateFile('./templates/password.html', data).then((render) => {
+            return render
+          })
+          return template
+        }
+      }
     }
   },
   {
@@ -64,15 +109,15 @@ const start = async () => {
       sensitiveInformation: String @auth
     }
 
-    type User {
-      first_name: String
-      last_name: String
-    }
+    # type User {
+    #   first_name: String
+    #   last_name: String
+    # }
 
-    type CreateUserInput {
-      first_name: String
-      last_name: String
-    }
+    # type CreateUserInput {
+    #   first_name: String
+    #   last_name: String
+    # }
   `;
 
   const resolvers = {
@@ -80,7 +125,7 @@ const start = async () => {
       sensitiveInformation: () => 'Sensitive'
     }
   }
-
+  
   const accountsGraphQL = AccountsModule.forRoot({ accountsServer })
 
   const schema = makeExecutableSchema({
