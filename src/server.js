@@ -8,10 +8,11 @@ const { AccountsServer } = require('@accounts/server')
 const { AccountsPassword } = require('@accounts/password')
 const { DatabaseManager } = require('@accounts/database-manager')
 const { renderString, renderTemplateFile } = require('template-file')
+import config from './config'
 
 sgMail.setApiKey('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')
 
-const start = async () => {
+export const start = async () => {
   // Create database connection
   mongoose.connect('mongodb+srv://mgauser:zllfiXurdnpArPKy@megastar.tx4dl.mongodb.net/portal?retryWrites=true&w=majority', {
     useNewUrlParser: true,
@@ -149,9 +150,12 @@ const start = async () => {
   })
   const server = new ApolloServer({ schema, context: accountsGraphQL.context })
 
-  server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`)
-  })
+  try {
+    //await mongoose.connect()
+    server.listen(config.port).then(({ url }) => {
+      console.log(`🚀  Server ready at ${url}`)
+    })
+  } catch (e) {
+    console.error(e)
+  }
 }
-
-start()
