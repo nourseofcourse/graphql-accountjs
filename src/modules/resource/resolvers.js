@@ -27,6 +27,15 @@ const resolvers = {
       } catch (e) {
         return e.message
       }
+    },
+    async updateResource(_, {id, input}) {
+      try {
+        const resource = await Resource.findByIdAndUpdate(id, input)
+        console.log(resource)
+      } catch(e) {
+        console.error(e)
+      }
+      console.log(input)
     }
   }
 }

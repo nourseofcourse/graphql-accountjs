@@ -27,8 +27,18 @@ const typeDefs = gql`
     image: String
   }
 
+  input UpdateResourceInput  {
+    name: String
+    description: String
+    link: String
+    public: Boolean
+    image_type: String
+    image: String
+  }
+
   type Mutation {
     createResource(input: CreateResourceInput): Resource!
+    updateResource(id: ID!, input: UpdateResourceInput): Resource!
   }
 `;
 
