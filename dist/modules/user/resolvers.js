@@ -1,14 +1,25 @@
 "use strict";
 
+var _user = require("../../models/user");
+
 //const { User, Role, Permission } = require('../../models/user')
 //import { JSONObjectResolver } from 'graphql-scalars'
 const resolvers = {
   Query: {
-    async getUsers2(_, __) {
+    async user(_, {
+      id
+    }) {
       try {
-        console.log(_); //const users = await models.User.find()
+        const user = await _user.User.findById(id);
+        return user;
+      } catch (e) {
+        return e.message;
+      }
+    },
 
-        const users = '';
+    async users(_, __) {
+      try {
+        const users = await _user.User.find();
         return users;
       } catch (e) {
         return e.message;

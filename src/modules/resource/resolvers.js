@@ -2,7 +2,7 @@ import { Resource } from '../../models/resource'
 
 const resolvers = {
   Query: {
-    async getResource(_, {id}) {
+    async resource(_, {id}) {
       try {
         const resource = await Resource.findById(id)
         return resource
@@ -10,7 +10,7 @@ const resolvers = {
         return e.message
       }
     },
-    async getResources(_, __) {
+    async resources(_, __) {
       try {
         const resources = await Resource.find()
         return resources

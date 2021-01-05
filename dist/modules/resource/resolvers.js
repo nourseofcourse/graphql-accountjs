@@ -4,7 +4,7 @@ var _resource = require("../../models/resource");
 
 const resolvers = {
   Query: {
-    async getResource(_, {
+    async resource(_, {
       id
     }) {
       try {
@@ -15,7 +15,7 @@ const resolvers = {
       }
     },
 
-    async getResources(_, __) {
+    async resources(_, __) {
       try {
         const resources = await _resource.Resource.find();
         return resources;

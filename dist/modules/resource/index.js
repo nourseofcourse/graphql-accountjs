@@ -14,8 +14,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    getResource(id: ID!): Resource!
-    getResources: [Resource]
+    resource(id: ID!): Resource!
+    resources: [Resource]
   }
 
   input CreateResourceInput {

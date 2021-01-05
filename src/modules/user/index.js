@@ -104,7 +104,8 @@ const typeDefs = gql`
   # }
 
   extend type Query {
-    getUsers2: [User]
+    users: [User]
+    user(id: ID!): User!
   }
 
   extend type User {

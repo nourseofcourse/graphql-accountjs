@@ -17,7 +17,8 @@ export const start = async () => {
   // Create database connection
   mongoose.connect('mongodb+srv://mgauser:zllfiXurdnpArPKy@megastar.tx4dl.mongodb.net/portal?retryWrites=true&w=majority', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   const mongoConn = mongoose.connection
 
@@ -108,17 +109,12 @@ export const start = async () => {
   const typeDefs = gql`
     type Query {
       sensitiveInformation: String @auth
-      getUsers: [User]
     }
   `;
 
   const resolvers = {
     Query: {
       sensitiveInformation: () => 'Sensitive',
-      async getUsers() {
-        const users = await userStorage.db.collection('users').find().toArray();
-        return users
-      }
     }
   }
 

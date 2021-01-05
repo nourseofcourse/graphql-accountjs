@@ -1,12 +1,20 @@
 //const { User, Role, Permission } = require('../../models/user')
 //import { JSONObjectResolver } from 'graphql-scalars'
+import { User } from '../../models/user'
+
 const resolvers = {
   Query: {
-    async getUsers2(_, __) {
+    async user(_, {id}) {
       try {
-        console.log(_)
-        //const users = await models.User.find()
-        const users = ''
+        const user = await User.findById(id)
+        return user
+      } catch (e) {
+        return e.message
+      }
+    },
+    async users(_, __) {
+      try {
+        const users = await User.find()
         return users
       } catch (e) {
         return e.message
