@@ -29,16 +29,30 @@ const resourceSchema = mongoose.Schema({
     maxlength: 255,
     default: ""
   },
-  context_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    refPath: 'onModel'
+  public: {
+    type: Boolean,
+    default: true
   },
-  context: {
+  image_type: {
     type: String,
-    required: true,
-    enum: ['Course', 'Lesson']
-  }
+    maxlength: 255,
+    trim: true
+  },
+  image: {
+    type: String,
+    maxlength: 255,
+    trim: true
+  } // context_id: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   refPath: 'onModel'
+  // },
+  // context: {
+  //   type: String,
+  //   required: true,
+  //   enum: ['Course', 'Lesson']
+  // }
+
 }, {
   timestamps: true
 });

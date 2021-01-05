@@ -6,7 +6,9 @@ const {
   mergeResolvers
 } = require('@graphql-toolkit/schema-merging');
 
-const user = require('./user'); // const user = require('./user')
+const user = require('./user');
+
+const resource = require('./resource'); // const user = require('./user')
 // const email = require('./email')
 // const lms = require('./lms')
 // module.exports = makeExecutableSchemaFromModules({
@@ -19,6 +21,6 @@ const user = require('./user'); // const user = require('./user')
 
 
 module.exports = {
-  typeDefs: mergeTypeDefs([user.typeDefs]),
-  resolvers: mergeResolvers([user.resolvers])
+  typeDefs: mergeTypeDefs([user.typeDefs, resource.typeDefs]),
+  resolvers: mergeResolvers([user.resolvers, resource.resolvers])
 };
