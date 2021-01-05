@@ -1,4 +1,6 @@
-const gql = require('graphql-tag')
+"use strict";
+
+const gql = require('graphql-tag');
 
 const typeDefs = gql`
   # scalar JSONObject
@@ -116,11 +118,11 @@ const typeDefs = gql`
     first_name: String
     last_name: String
   }
-`
+`;
 
-const resolvers = require('./resolvers')
+const resolvers = require('./resolvers');
 
 module.exports = {
   typeDefs,
   resolvers
-}
+};

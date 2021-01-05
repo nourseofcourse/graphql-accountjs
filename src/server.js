@@ -8,6 +8,7 @@ const { AccountsServer } = require('@accounts/server')
 const { AccountsPassword } = require('@accounts/password')
 const { DatabaseManager } = require('@accounts/database-manager')
 const { renderString, renderTemplateFile } = require('template-file')
+import modules from './modules'
 import config from './config'
 
 sgMail.setApiKey('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')
@@ -105,45 +106,28 @@ export const start = async () => {
   })
 
   const typeDefs = gql`
-
     type Query {
       sensitiveInformation: String @auth
       getUsers: [User]
     }
-
-    type User {
-      first_name: String
-      last_name: String
-    }
-
-    type CreateUserInput {
-      first_name: String
-      last_name: String
-    }
-
-    
   `;
 
   const resolvers = {
     Query: {
       sensitiveInformation: () => 'Sensitive',
-      async getUsers(_, __, {models}) {
-        try {
-          console.log(_)
-          const users = await models.User.find()
-          return users
-        } catch (e) {
-          return e.message
-        }
+      async getUsers() {
+        const users = await userStorage.db.collection('users').find().toArray();
+        return users
       }
     }
   }
+
   
   const accountsGraphQL = AccountsModule.forRoot({ accountsServer })
 
   const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([ typeDefs, accountsGraphQL.typeDefs ]),
-    resolvers: mergeResolvers([ accountsGraphQL.resolvers, resolvers ]),
+    typeDefs: mergeTypeDefs([ typeDefs, modules.typeDefs, accountsGraphQL.typeDefs ]),
+    resolvers: mergeResolvers([ accountsGraphQL.resolvers, resolvers, modules.resolvers ]),
     schemaDirectives: {
       ...accountsGraphQL.schemaDirectives
     }

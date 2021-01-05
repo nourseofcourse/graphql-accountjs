@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.start = void 0;
 
+var _modules = _interopRequireDefault(require("./modules"));
+
 var _config = _interopRequireDefault(require("./config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -154,38 +156,18 @@ const start = async () => {
     password: accountsPassword
   });
   const typeDefs = gql`
-
     type Query {
       sensitiveInformation: String @auth
       getUsers: [User]
     }
-
-    type User {
-      first_name: String
-      last_name: String
-    }
-
-    type CreateUserInput {
-      first_name: String
-      last_name: String
-    }
-
-    
   `;
   const resolvers = {
     Query: {
       sensitiveInformation: () => 'Sensitive',
 
-      async getUsers(_, __, {
-        models
-      }) {
-        try {
-          console.log(_);
-          const users = await models.User.find();
-          return users;
-        } catch (e) {
-          return e.message;
-        }
+      async getUsers() {
+        const users = await userStorage.db.collection('users').find().toArray();
+        return users;
       }
 
     }
@@ -194,8 +176,8 @@ const start = async () => {
     accountsServer
   });
   const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
+    typeDefs: mergeTypeDefs([typeDefs, _modules.default.typeDefs, accountsGraphQL.typeDefs]),
+    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers, _modules.default.resolvers]),
     schemaDirectives: _objectSpread({}, accountsGraphQL.schemaDirectives)
   });
   const server = new ApolloServer({

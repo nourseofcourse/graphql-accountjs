@@ -1,20 +1,21 @@
+"use strict";
+
 //const { User, Role, Permission } = require('../../models/user')
 //import { JSONObjectResolver } from 'graphql-scalars'
 const resolvers = {
   Query: {
     async getUsers2(_, __) {
       try {
-        console.log(_)
-        //const users = await models.User.find()
-        const users = ''
-        return users
+        console.log(_); //const users = await models.User.find()
+
+        const users = '';
+        return users;
       } catch (e) {
-        return e.message
+        return e.message;
       }
     }
-  }
-  // JSONObject: JSONObjectResolver,
 
+  } // JSONObject: JSONObjectResolver,
   // Query: {
   //   me() {
   //     return 'hi'
@@ -43,13 +44,10 @@ const resolvers = {
   // },
   // Mutation: {
   //   // updateMe(_, {input}) {
-
   //   // },
   //   // signin(_, {input}) {
-
   //   // },
   //   // signup(_, {input}) {
-
   //   // },
   //   async createUser(_, { input }) {
   //     try {
@@ -70,6 +68,6 @@ const resolvers = {
   //     }
   //   }
   // }
-}
 
-module.exports = resolvers
+};
+module.exports = resolvers;

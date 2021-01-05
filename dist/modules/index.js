@@ -1,10 +1,14 @@
+"use strict";
+
 // const { makeExecutableSchemaFromModules } = require('../utils/modules')
-const { mergeTypeDefs, mergeResolvers } = require('@graphql-toolkit/schema-merging')
-const user = require('./user')
-// const user = require('./user')
+const {
+  mergeTypeDefs,
+  mergeResolvers
+} = require('@graphql-toolkit/schema-merging');
+
+const user = require('./user'); // const user = require('./user')
 // const email = require('./email')
 // const lms = require('./lms')
-
 // module.exports = makeExecutableSchemaFromModules({
 //   modules: [
 //     user,
@@ -13,7 +17,8 @@ const user = require('./user')
 //   ]
 // })
 
+
 module.exports = {
-  typeDefs: mergeTypeDefs([ user.typeDefs ]),
-  resolvers: mergeResolvers([ user.resolvers ]),
-}
+  typeDefs: mergeTypeDefs([user.typeDefs]),
+  resolvers: mergeResolvers([user.resolvers])
+};

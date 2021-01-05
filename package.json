@@ -23,6 +23,7 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.23.0",
     "graphql": "^15.4.0",
+    "graphql-scalars": "^1.7.0",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.5",
     "mongoose-url-slugs": "^1.0.2",
