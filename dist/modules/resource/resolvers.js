@@ -43,12 +43,21 @@ const resolvers = {
     }) {
       try {
         const resource = await _resource.Resource.findByIdAndUpdate(id, input);
-        console.log(resource);
+        return resource;
       } catch (e) {
         console.error(e);
       }
+    },
 
-      console.log(input);
+    async deleteResource(_, {
+      id
+    }) {
+      try {
+        await _resource.Resource.findByIdAndDelete(id);
+        return true;
+      } catch (e) {
+        console.log(e);
+      }
     }
 
   }

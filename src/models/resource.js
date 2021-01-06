@@ -51,6 +51,6 @@ const resourceSchema = mongoose.Schema(
   { timestamps: true }
 )
 
-resourceSchema.index({ slug: 1 }, { unique: true })
+//resourceSchema.index({ slug: 1 }, { unique: true })
 
 export const Resource = mongoose.model('Resource', resourceSchema)

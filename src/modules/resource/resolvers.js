@@ -31,11 +31,18 @@ const resolvers = {
     async updateResource(_, {id, input}) {
       try {
         const resource = await Resource.findByIdAndUpdate(id, input)
-        console.log(resource)
+        return resource
       } catch(e) {
         console.error(e)
       }
-      console.log(input)
+    },
+    async deleteResource(_, {id}) {
+      try {
+        await Resource.findByIdAndDelete(id)
+        return true
+      } catch(e) {
+        console.log(e)
+      }
     }
   }
 }

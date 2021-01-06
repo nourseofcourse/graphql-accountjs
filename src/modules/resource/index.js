@@ -37,6 +37,7 @@ const typeDefs = gql`
   type Mutation {
     createResource(input: CreateResourceInput): Resource!
     updateResource(id: ID!, input: UpdateResourceInput): Resource!
+    deleteResource(id: ID!): Boolean
   }
 `
 const resolvers = require('./resolvers')
