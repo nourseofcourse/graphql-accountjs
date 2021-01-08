@@ -28,91 +28,47 @@ const userSchema = new _mongoose.default.Schema({
     type: String,
     required: false,
     maxlength: 125
+  },
+  short_name: {
+    type: String,
+    limit: 255
+  },
+  // roles: [
+  //   {
+  //     type: mongoose.Schema.ObjectId,
+  //     ref: "role"
+  //   }
+  // ],
+  lastLoginAt: {
+    type: Date,
+    required: false
+  },
+  lastLogoutAt: {
+    type: Date,
+    required: false
+  },
+  lastSigninIp: {
+    type: String,
+    required: false
+  },
+  settings: {
+    theme: {
+      type: String,
+      required: false,
+      default: 'LIGHT'
+    }
   }
 }, {
   timestamps: true
 });
+userSchema.pre('save', function (next) {
+  let user = this;
+  if (!user.isModified('first_name') || !user.isModified('last_name')) return next();
+  user.short_name = (user.first_name.charAt(0) + user.last_name).toLowerCase();
+  next();
+});
 
-const User = _mongoose.default.model('User', userSchema); // const userSchema = new mongoose.Schema(
-//   {
-//     first_name: {
-//       type: String,
-//       required: true,
-//       maxlength: 125
-//     },
-//     last_name: {
-//       type: String,
-//       required: true,
-//       maxlength: 125
-//     },
-//     username: {
-//       type: String,
-//       required: true,
-//       maxlength: 50,
-//       unique: true
-//     },
-//     short_name: {
-//       type: String,
-//       limit: 255
-//     },
-//     email: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//       trim: true
-//     },
-//     roles: [
-//       {
-//         type: mongoose.Schema.ObjectId,
-//         ref: "role"
-//       }
-//     ],
-//     avatar: {
-//       type: String,
-//       maxlength: 255,
-//       required: false
-//     },
-//     password: {
-//       type: String,
-//       required: true
-//     },
-//     timeZone: {
-//       type: String,
-//       required: false
-//     },
-//     lastLoginAt: {
-//       type: Date,
-//       required: false
-//     },
-//     lastLogoutAt: {
-//       type: Date,
-//       required: false
-//     },
-//     lastSigninIp: {
-//       type: String,
-//       required: false
-//     },
-//     settings: {
-//       theme: {
-//         type: String,
-//         required: false,
-//         default: 'DARK'
-//       },
-//       emailNotifications: {
-//         type: Boolean,
-//         required: false
-//       },
-//       pushNotification: {
-//         type: Boolean,
-//         required: false
-//       }
-//     }
-//   },
-//   {
-//     timestamps: true
-//   }
-// )
-// const roleSchema = new mongoose.Schema(
+const User = _mongoose.default.model('User', userSchema); // const roleSchema = new mongoose.Schema(
 //   {
 //     name: {
 //       type: String,
@@ -153,12 +109,6 @@ const User = _mongoose.default.model('User', userSchema); // const userSchema = 
 //       next()
 //     })
 //   })
-// })
-// userSchema.pre('save', function(next) {
-//   let user = this
-//   if(!user.isModified('first_name') || !user.isModified('last_name')) return next()
-//   user.short_name = (user.first_name.charAt(0) + user.last_name).toLowerCase()
-//   next()
 // })
 // userSchema.methods.checkPassword = function(password) {
 //   const passwordHash = this.password

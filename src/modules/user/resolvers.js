@@ -1,6 +1,6 @@
 //const { User, Role, Permission } = require('../../models/user')
 //import { JSONObjectResolver } from 'graphql-scalars'
-import { User } from '../../models/user'
+import { User } from './model'
 
 const resolvers = {
   Query: {

@@ -1,6 +1,6 @@
 "use strict";
 
-var _user = require("../../models/user");
+var _model = require("./model");
 
 //const { User, Role, Permission } = require('../../models/user')
 //import { JSONObjectResolver } from 'graphql-scalars'
@@ -10,7 +10,7 @@ const resolvers = {
       id
     }) {
       try {
-        const user = await _user.User.findById(id);
+        const user = await _model.User.findById(id);
         return user;
       } catch (e) {
         return e.message;
@@ -19,7 +19,7 @@ const resolvers = {
 
     async users(_, __) {
       try {
-        const users = await _user.User.find();
+        const users = await _model.User.find();
         return users;
       } catch (e) {
         return e.message;

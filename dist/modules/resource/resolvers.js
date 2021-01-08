@@ -1,6 +1,6 @@
 "use strict";
 
-var _resource = require("../../models/resource");
+var _model = require("./model");
 
 const resolvers = {
   Query: {
@@ -8,7 +8,7 @@ const resolvers = {
       id
     }) {
       try {
-        const resource = await _resource.Resource.findById(id);
+        const resource = await _model.Resource.findById(id);
         return resource;
       } catch (e) {
         return e.message;
@@ -17,7 +17,7 @@ const resolvers = {
 
     async resources(_, __) {
       try {
-        const resources = await _resource.Resource.find();
+        const resources = await _model.Resource.find();
         return resources;
       } catch (e) {
         return e.message;
@@ -30,7 +30,7 @@ const resolvers = {
       input
     }) {
       try {
-        const resource = await _resource.Resource.create(input);
+        const resource = await _model.Resource.create(input);
         return resource;
       } catch (e) {
         return e.message;
@@ -42,7 +42,7 @@ const resolvers = {
       input
     }) {
       try {
-        const resource = await _resource.Resource.findByIdAndUpdate(id, input);
+        const resource = await _model.Resource.findByIdAndUpdate(id, input);
         return resource;
       } catch (e) {
         console.error(e);
@@ -53,7 +53,7 @@ const resolvers = {
       id
     }) {
       try {
-        await _resource.Resource.findByIdAndDelete(id);
+        await _model.Resource.findByIdAndDelete(id);
         return true;
       } catch (e) {
         console.log(e);

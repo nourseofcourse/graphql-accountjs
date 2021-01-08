@@ -1,4 +1,4 @@
-import { Resource } from '../../models/resource'
+import { Resource } from './model'
 
 const resolvers = {
   Query: {

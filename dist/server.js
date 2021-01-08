@@ -74,7 +74,8 @@ const start = async () => {
     sessionStorage: userStorage,
     userStorage
   });
-  const accountsPassword = new AccountsPassword({// This option is called when a new user create an account
+  const accountsPassword = new AccountsPassword({
+    // This option is called when a new user create an account
     // Inside we can apply our logic to validate the user fields
     // validateNewUser: (user) => {
     //   if (!user.firstName) {
@@ -89,6 +90,18 @@ const start = async () => {
     //   }
     //   return user;
     // },
+    validateNewUser: user => {
+      if (!user.first_name) {
+        throw new Error('First name is required');
+      }
+
+      if (!user.last_name) {
+        throw new Error('Last name is required');
+      }
+
+      user.short_name = (user.first_name.charAt(0) + user.last_name).toLowerCase();
+      return user;
+    }
   }); // Create accounts server that holds a lower level of all accounts operations
 
   const accountsServer = new AccountsServer({

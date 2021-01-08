@@ -48,6 +48,18 @@ export const start = async () => {
     //   }
     //   return user;
     // },
+    validateNewUser: (user) => {
+      if(!user.first_name) {
+        throw new Error('First name is required')
+      }
+
+      if(!user.last_name) {
+        throw new Error('Last name is required')
+      }
+      user.short_name = (user.first_name.charAt(0) + user.last_name).toLowerCase()
+      
+      return user
+    }
   })
  
   // Create accounts server that holds a lower level of all accounts operations
