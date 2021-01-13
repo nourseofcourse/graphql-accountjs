@@ -8,6 +8,8 @@ const { AccountsServer } = require('@accounts/server')
 const { AccountsPassword } = require('@accounts/password')
 const { DatabaseManager } = require('@accounts/database-manager')
 const { renderString, renderTemplateFile } = require('template-file')
+import { ApolloServerPluginInlineTrace } from 'apollo-server-core'
+
 import modules from './modules'
 import config from './config'
 
@@ -57,7 +59,7 @@ export const start = async () => {
         throw new Error('Last name is required')
       }
       user.short_name = (user.first_name.charAt(0) + user.last_name).toLowerCase()
-      
+
       return user
     }
   })
@@ -140,10 +142,22 @@ export const start = async () => {
       ...accountsGraphQL.schemaDirectives
     }
   })
-  const server = new ApolloServer({ schema, context: accountsGraphQL.context })
+  const server = new ApolloServer({ 
+    schema, 
+    context: accountsGraphQL.context,
+    plugins: [
+      require('./plugins/apollo-server-plugin-operation-registry'),
+      ApolloServerPluginInlineTrace()
+    ],
+    cors: {
+      origin: '*',
+      credentials: true
+    }
+  })
 
   try {
     //await mongoose.connect()
+    //server.listen({port: config.port, host: '192.168.1.163'}).then(({ url }) => {
     server.listen(config.port).then(({ url }) => {
       console.log(`🚀  Server ready at ${url}`)
     })

@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.start = void 0;
 
+var _apolloServerCore = require("apollo-server-core");
+
 var _modules = _interopRequireDefault(require("./modules"));
 
 var _config = _interopRequireDefault(require("./config"));
@@ -189,11 +191,17 @@ const start = async () => {
   });
   const server = new ApolloServer({
     schema,
-    context: accountsGraphQL.context
+    context: accountsGraphQL.context,
+    plugins: [require('./plugins/apollo-server-plugin-operation-registry'), (0, _apolloServerCore.ApolloServerPluginInlineTrace)()],
+    cors: {
+      origin: '*',
+      credentials: true
+    }
   });
 
   try {
     //await mongoose.connect()
+    //server.listen({port: config.port, host: '192.168.1.163'}).then(({ url }) => {
     server.listen(_config.default.port).then(({
       url
     }) => {
