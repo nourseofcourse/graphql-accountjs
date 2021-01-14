@@ -1,13 +1,13 @@
-const { ApolloServer, gql, makeExecutableSchema } = require('apollo-server')
-const sgMail = require('@sendgrid/mail')
-const { mergeTypeDefs, mergeResolvers } = require('@graphql-toolkit/schema-merging')
-const { AccountsModule } = require('@accounts/graphql-api')
-const mongoose = require('mongoose')
-const { Mongo } = require('@accounts/mongo')
-const { AccountsServer } = require('@accounts/server')
-const { AccountsPassword } = require('@accounts/password')
-const { DatabaseManager } = require('@accounts/database-manager')
-const { renderString, renderTemplateFile } = require('template-file')
+import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server'
+import sgMail from '@sendgrid/mail'
+import { mergeTypeDefs, mergeResolvers } from '@graphql-toolkit/schema-merging'
+import { AccountsModule } from '@accounts/graphql-api'
+import mongoose from 'mongoose'
+import { Mongo } from '@accounts/mongo'
+import { AccountsServer } from '@accounts/server'
+import { AccountsPassword } from '@accounts/password'
+import { DatabaseManager } from '@accounts/database-manager'
+import { renderString, renderTemplateFile } from 'template-file'
 import { ApolloServerPluginInlineTrace } from 'apollo-server-core'
 
 import modules from './modules'

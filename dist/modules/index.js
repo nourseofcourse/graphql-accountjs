@@ -8,7 +8,11 @@ const {
 
 const user = require('./user');
 
-const resource = require('./resource'); // const user = require('./user')
+const resource = require('./resource');
+
+const course = require('./course');
+
+const account = require('./account'); // const user = require('./user')
 // const email = require('./email')
 // const lms = require('./lms')
 // module.exports = makeExecutableSchemaFromModules({
@@ -21,6 +25,6 @@ const resource = require('./resource'); // const user = require('./user')
 
 
 module.exports = {
-  typeDefs: mergeTypeDefs([user.typeDefs, resource.typeDefs]),
-  resolvers: mergeResolvers([user.resolvers, resource.resolvers])
+  typeDefs: mergeTypeDefs([user.typeDefs, account.typeDefs, resource.typeDefs, course.typeDefs]),
+  resolvers: mergeResolvers([user.resolvers, account.resolvers, resource.resolvers, course.resolvers])
 };

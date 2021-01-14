@@ -14,6 +14,25 @@ const accountSchema = new _mongoose.default.Schema({
     type: String,
     required: true,
     maxlength: 125
+  },
+  avatar: {
+    type: String,
+    maxlength: 255,
+    trim: true,
+    default: ""
+  },
+  owners: [{
+    type: _mongoose.default.Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  agents: [{
+    type: _mongoose.default.Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  status: {
+    type: String,
+    default: 'ACTIVE',
+    enum: ['ACTIVE', 'DRAFT', 'TRASH', 'INACTIVE']
   }
 });
 

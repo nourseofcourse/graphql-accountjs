@@ -5,6 +5,26 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.start = void 0;
 
+var _apolloServer = require("apollo-server");
+
+var _mail = _interopRequireDefault(require("@sendgrid/mail"));
+
+var _schemaMerging = require("@graphql-toolkit/schema-merging");
+
+var _graphqlApi = require("@accounts/graphql-api");
+
+var _mongoose = _interopRequireDefault(require("mongoose"));
+
+var _mongo = require("@accounts/mongo");
+
+var _server = require("@accounts/server");
+
+var _password = require("@accounts/password");
+
+var _databaseManager = require("@accounts/database-manager");
+
+var _templateFile = require("template-file");
+
 var _apolloServerCore = require("apollo-server-core");
 
 var _modules = _interopRequireDefault(require("./modules"));
@@ -19,64 +39,25 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-const {
-  ApolloServer,
-  gql,
-  makeExecutableSchema
-} = require('apollo-server');
-
-const sgMail = require('@sendgrid/mail');
-
-const {
-  mergeTypeDefs,
-  mergeResolvers
-} = require('@graphql-toolkit/schema-merging');
-
-const {
-  AccountsModule
-} = require('@accounts/graphql-api');
-
-const mongoose = require('mongoose');
-
-const {
-  Mongo
-} = require('@accounts/mongo');
-
-const {
-  AccountsServer
-} = require('@accounts/server');
-
-const {
-  AccountsPassword
-} = require('@accounts/password');
-
-const {
-  DatabaseManager
-} = require('@accounts/database-manager');
-
-const {
-  renderString,
-  renderTemplateFile
-} = require('template-file');
-
-sgMail.setApiKey('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');
+_mail.default.setApiKey('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');
 
 const start = async () => {
   // Create database connection
-  mongoose.connect('mongodb+srv://mgauser:zllfiXurdnpArPKy@megastar.tx4dl.mongodb.net/portal?retryWrites=true&w=majority', {
+  _mongoose.default.connect('mongodb+srv://mgauser:zllfiXurdnpArPKy@megastar.tx4dl.mongodb.net/portal?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
   });
-  const mongoConn = mongoose.connection; // Build a storage for storing users
 
-  const userStorage = new Mongo(mongoConn); // create database manager ( create user, find users, sessions etc)
+  const mongoConn = _mongoose.default.connection; // Build a storage for storing users
 
-  const accountsDb = new DatabaseManager({
+  const userStorage = new _mongo.Mongo(mongoConn); // create database manager ( create user, find users, sessions etc)
+
+  const accountsDb = new _databaseManager.DatabaseManager({
     sessionStorage: userStorage,
     userStorage
   });
-  const accountsPassword = new AccountsPassword({
+  const accountsPassword = new _password.AccountsPassword({
     // This option is called when a new user create an account
     // Inside we can apply our logic to validate the user fields
     // validateNewUser: (user) => {
@@ -106,7 +87,7 @@ const start = async () => {
     }
   }); // Create accounts server that holds a lower level of all accounts operations
 
-  const accountsServer = new AccountsServer({
+  const accountsServer = new _server.AccountsServer({
     db: accountsDb,
     tokenSecret: 'mgaSecretToken',
     sendMail: async ({
@@ -117,7 +98,8 @@ const start = async () => {
       html
     }) => {
       const email = await html;
-      sgMail.send({
+
+      _mail.default.send({
         to,
         from: "Megastar Advisors Portal <info@megastaradvisors.com>",
         subject,
@@ -135,7 +117,7 @@ const start = async () => {
             email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
             url
           };
-          const template = await renderTemplateFile('./templates/verify.html', data).then(render => {
+          const template = await (0, _templateFile.renderTemplateFile)('./templates/verify.html', data).then(render => {
             return render;
           });
           return template;
@@ -147,7 +129,7 @@ const start = async () => {
             email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
             url
           };
-          const template = await renderTemplateFile('./templates/password.html', data).then(render => {
+          const template = await (0, _templateFile.renderTemplateFile)('./templates/password.html', data).then(render => {
             return render;
           });
           return template;
@@ -161,7 +143,7 @@ const start = async () => {
             email: user.emails[0].address.replace(/([@\.:])/g, '<span>$1</span>'),
             url
           };
-          const template = await renderTemplateFile('./templates/password.html', data).then(render => {
+          const template = await (0, _templateFile.renderTemplateFile)('./templates/password.html', data).then(render => {
             return render;
           });
           return template;
@@ -171,7 +153,7 @@ const start = async () => {
   }, {
     password: accountsPassword
   });
-  const typeDefs = gql`
+  const typeDefs = (0, _apolloServer.gql)`
     type Query {
       sensitiveInformation: String @auth
     }
@@ -181,15 +163,17 @@ const start = async () => {
       sensitiveInformation: () => 'Sensitive'
     }
   };
-  const accountsGraphQL = AccountsModule.forRoot({
+
+  const accountsGraphQL = _graphqlApi.AccountsModule.forRoot({
     accountsServer
   });
-  const schema = makeExecutableSchema({
-    typeDefs: mergeTypeDefs([typeDefs, _modules.default.typeDefs, accountsGraphQL.typeDefs]),
-    resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers, _modules.default.resolvers]),
+
+  const schema = (0, _apolloServer.makeExecutableSchema)({
+    typeDefs: (0, _schemaMerging.mergeTypeDefs)([typeDefs, _modules.default.typeDefs, accountsGraphQL.typeDefs]),
+    resolvers: (0, _schemaMerging.mergeResolvers)([accountsGraphQL.resolvers, resolvers, _modules.default.resolvers]),
     schemaDirectives: _objectSpread({}, accountsGraphQL.schemaDirectives)
   });
-  const server = new ApolloServer({
+  const server = new _apolloServer.ApolloServer({
     schema,
     context: accountsGraphQL.context,
     plugins: [require('./plugins/apollo-server-plugin-operation-registry'), (0, _apolloServerCore.ApolloServerPluginInlineTrace)()],
