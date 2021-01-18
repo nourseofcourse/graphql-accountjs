@@ -10,4 +10,10 @@ client.messages.create({
   to: '+17273071923',
   from: twilioNumber
 })
-.then((message) => console.log(message.sid))
+.then((err, message) => {
+  if(err) {
+    console.error(err)
+  } else {
+    console.log(message.status)
+  }
+})
