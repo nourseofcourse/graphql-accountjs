@@ -9,6 +9,7 @@ import { AccountsPassword } from '@accounts/password'
 import { DatabaseManager } from '@accounts/database-manager'
 import { renderString, renderTemplateFile } from 'template-file'
 import { ApolloServerPluginInlineTrace } from 'apollo-server-core'
+import Scheduler from './scheduler'
 
 import modules from './modules'
 import config from './config'
@@ -161,6 +162,7 @@ export const start = async () => {
     server.listen(config.port).then(({ url }) => {
       console.log(`🚀  Server ready at ${url}`)
     })
+    //Scheduler.start()
   } catch (e) {
     console.error(e)
   }

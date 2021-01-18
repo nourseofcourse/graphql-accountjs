@@ -71,6 +71,7 @@ const typeDefs = gql`
     state: State
     zip: Int
     country: Country
+    google_maps_address: String
   }
 
   input CreateWorkshopInput {

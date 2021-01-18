@@ -27,6 +27,8 @@ var _templateFile = require("template-file");
 
 var _apolloServerCore = require("apollo-server-core");
 
+var _scheduler = _interopRequireDefault(require("./scheduler"));
+
 var _modules = _interopRequireDefault(require("./modules"));
 
 var _config = _interopRequireDefault(require("./config"));
@@ -190,7 +192,7 @@ const start = async () => {
       url
     }) => {
       console.log(`🚀  Server ready at ${url}`);
-    });
+    }); //Scheduler.start()
   } catch (e) {
     console.error(e);
   }
